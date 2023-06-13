@@ -2,8 +2,9 @@
   <form @submit.prevent class="d-flex">
     <input
       v-model="nameFilm"
+      @keyup.enter="SearchFilm"
       class="form-control mr-2"
-      type="search"
+      type="text"
       placeholder="поиск..."
       aria-label="Search"
       name="nameFilm"
@@ -25,6 +26,11 @@ export default {
   methods: {
     SearchFilm() {
       this.$emit("search", this.nameFilm);
+    },
+  },
+  watch: {
+    nameFilm() {
+      this.SearchFilm();
     },
   },
 };

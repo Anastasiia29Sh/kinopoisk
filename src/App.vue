@@ -4,7 +4,12 @@
     <my-header @searchFilms="searchFilms"></my-header>
 
     <!-- фильтр и сортировка -->
-    <div class="filter-sort">
+    <div
+      class="filter-sort"
+      :class="{
+        'block-none': isSearch === 1,
+      }"
+    >
       <div class="filter">
         <my-select
           v-model="selectedFilter"
@@ -23,6 +28,15 @@
       </div>
     </div>
 
+    <p
+      class="mess"
+      :class="{
+        'mess-none': mess === '',
+      }"
+    >
+      {{ mess }}
+    </p>
+
     <!-- список фильмов -->
     <film-list :films="films"></film-list>
 
@@ -31,6 +45,9 @@
       :page="page"
       :totalPages="totalPages"
       @change="changePage"
+      :class="{
+        'block-none': totalPages <= 1,
+      }"
     ></pagination>
   </div>
 </template>
@@ -54,7 +71,6 @@ export default {
       allFilms: [],
       films: [],
       allFilmSort: [],
-      allFilmFilter: [],
       page: 1,
       limit: 25,
       totalPages: 0,
@@ -70,6 +86,7 @@ export default {
       isSort: 0,
       isFilter: 0,
       isSearch: 0,
+      mess: "",
     };
   },
   mounted() {
@@ -106,13 +123,28 @@ export default {
       this.selectedFilter = "";
       this.page = 1;
       let allFilmSort = Array.from(this.allFilms);
+      nameFilm = String(nameFilm);
       nameFilm = nameFilm.trim();
       nameFilm = nameFilm.toLowerCase();
-      this.allFilmSort = allFilmSort.filter((f) =>
-        f.name.trim().includes(nameFilm)
+      this.allFilmSort = allFilmSort.filter(
+        (f) => this.checkNameFilm(f.name, nameFilm) > 0
       );
       this.paginationFilms(this.page, this.allFilmSort);
-      console.log(nameFilm);
+      if (nameFilm.length == 0) {
+        this.isSearch = 0;
+      }
+      if (this.allFilmSort.length == 0)
+        this.mess = "По Вашему запросу ничего не найдено";
+      else this.mess = "";
+    },
+    checkNameFilm(originalNameFilm, nameFilm) {
+      let s = 0;
+      for (let el of originalNameFilm.toLowerCase().split(" ")) {
+        if (el.length > 1) {
+          s = el.startsWith(nameFilm) ? s + 1 : s;
+        }
+      }
+      return s;
     },
   },
   watch: {
@@ -125,10 +157,7 @@ export default {
     },
     selectedFilter(newValue) {
       this.isFilter = 1;
-      let allFilmSort = [];
-      if (this.isSearch == 1) {
-        allFilmSort = Array.from(this.allFilmSort);
-      } else allFilmSort = Array.from(this.allFilms);
+      let allFilmSort = Array.from(this.allFilms);
       if (newValue != "all") {
         this.allFilmSort = allFilmSort.filter((f) => f.type === newValue);
       } else {
@@ -144,7 +173,7 @@ export default {
     selectedSort(newValue) {
       this.isSort = 1;
       let allFilmSort = [];
-      if (this.isFilter == 1 || this.isSearch == 1) {
+      if (this.isFilter == 1) {
         allFilmSort = Array.from(this.allFilmSort);
       } else allFilmSort = Array.from(this.allFilms);
       if (newValue === "year") {
@@ -209,5 +238,16 @@ body {
       width: 130px;
     }
   }
+}
+.block-none {
+  display: none;
+}
+.mess {
+  color: #fff;
+  padding: 30px 30px 10px 30px !important;
+  text-align: center;
+}
+.mess-none {
+  display: none;
 }
 </style>

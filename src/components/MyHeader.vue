@@ -73,6 +73,10 @@ nav.header {
     margin-right: 3%;
     margin-left: -5px;
   }
+  button:focus {
+    box-shadow: none;
+    border: 1px solid $bg2;
+  }
   @media screen and (min-width: $md) and (max-width: $xl) {
     a {
       font-size: 16px;
@@ -82,12 +86,15 @@ nav.header {
     }
   }
 }
+.navbar-collapse {
+  text-align: end;
+}
 // поиск
 .search-film-small {
   padding: 20px 30px !important;
   margin: 0 auto;
   display: block;
   width: 100%;
-  margin-bottom: -30px;
+  margin-bottom: -20px;
 }
 </style>
