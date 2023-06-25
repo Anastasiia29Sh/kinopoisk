@@ -1,7 +1,12 @@
 <template>
   <!-- СПИСОК ФИЛЬМОВ -->
   <div class="list_film">
-    <div v-for="film of films" :key="film.id" class="card">
+    <div
+      v-for="film of films"
+      :key="film.id"
+      class="card"
+      @click="$router.push(`/film/${film.id}`)"
+    >
       <p class="rating">{{ film.rating.imdb }}</p>
       <img :src="film.poster.url" class="card-img-top" alt="" />
       <div class="card-body">
@@ -45,6 +50,13 @@ $xl: 1200px;
   padding: 20px 30px !important;
   color: #fff;
   position: relative;
+
+  .card:hover {
+    cursor: pointer;
+    -webkit-box-shadow: 0px 0px 10px 5px rgba(229, 138, 0, 1);
+    -moz-box-shadow: 0px 0px 10px 5px rgba(229, 138, 0, 1);
+    box-shadow: 0px 0px 10px 5px rgba(229, 138, 0, 1);
+  }
 
   .card-body {
     padding: 5px;

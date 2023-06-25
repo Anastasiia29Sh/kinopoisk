@@ -1,10 +1,10 @@
 <template>
   <nav class="navbar navbar-expand-md navbar-dark sticky-top header">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#"
+      <a class="navbar-brand" @click="$router.push('/')"
         ><img src="../assets/logo_kinopoisk.png" alt=""
       /></a>
-      <a class="navbar-brand mylogo" href="#">КиноПоиск</a>
+      <a class="navbar-brand mylogo" @click="$router.push('/')">КиноПоиск</a>
       <button
         class="navbar-toggle navbar-toggler"
         type="button"
@@ -16,7 +16,7 @@
       <div class="collapse navbar-collapse" id="navbarMain">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="#">Главная</a>
+            <a class="nav-link" @click="$router.push('/')">Главная</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">Закладки|Оценки</a>
