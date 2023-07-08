@@ -1,11 +1,11 @@
 <template>
   <div
+    class="film-id-page"
     :class="{
       'block-none': searchNameFilm.trim() != '',
     }"
   >
-    <h2>Hello</h2>
-    <p>{{ $route.params.id }}</p>
+    <film-card :infoFilmId="infoFilmId"></film-card>
   </div>
 
   <my-main
@@ -19,12 +19,19 @@
 
 <script>
 import MyMain from "@/pages/Main.vue";
+import FilmCard from "@/components/FilmCard.vue";
 export default {
   components: {
     MyMain,
+    FilmCard,
   },
   data() {
-    return {};
+    return {
+      infoFilmId: [],
+      posterFilm: "",
+      logoFilm: "",
+      ratingFilm: "",
+    };
   },
   props: {
     allFilms: {
@@ -33,6 +40,16 @@ export default {
     },
     searchNameFilm: {
       type: String,
+    },
+  },
+  mounted() {
+    this.getInfoFilm();
+  },
+  methods: {
+    getInfoFilm() {
+      this.infoFilmId = this.globalFilms.filter(
+        (f) => f.id == this.$route.params.id
+      );
     },
   },
   watch: {
@@ -47,10 +64,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-h2,
-p {
-  color: #fff;
+$sm: 576px;
+$md: 768px;
+$lg: 992px;
+$xl: 1200px;
+.film-id-page {
+  padding: 50px 30px !important;
+  width: 100%;
 }
+
 .block-none {
   display: none;
 }

@@ -231,13 +231,6 @@ $sm: 576px;
 $md: 768px;
 $lg: 992px;
 $xl: 1200px;
-*,
-body {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  background-color: $bg;
-}
 //  фильтр и сортировка
 .filter-sort {
   display: flex;
