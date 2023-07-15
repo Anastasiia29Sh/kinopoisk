@@ -32,7 +32,7 @@
 <script>
 import ActionsFilm from "@/components/ActionsFilm.vue";
 export default {
-  name: "FilmCard",
+  name: "FilmCardBig",
   components: {
     ActionsFilm,
   },

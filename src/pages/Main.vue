@@ -55,7 +55,6 @@ import FilmList from "@/components/FilmList.vue";
 import Pagination from "@/components/Pagination.vue";
 import MySelect from "@/components/UI/MySelect.vue";
 import MyHeader from "@/components/MyHeader.vue";
-import { mapState, mapActions } from "vuex";
 export default {
   components: {
     FilmList,
@@ -65,7 +64,6 @@ export default {
   },
   data() {
     return {
-      // allFilms: [],
       films: [],
       allFilmSort: [],
       page: 1,
@@ -97,24 +95,8 @@ export default {
   },
   mounted() {
     this.outputListFilms();
-    // this.fetchFilms();
   },
   methods: {
-    // ...mapActions({
-    //   fetchFilms: "fetchFilms",
-    // }),
-    //  async fetchFilms() {
-    //    axios.get("http://localhost:3000/docs").then((res) => {
-    //      this.allFilms = res.data;
-    //      this.films = res.data;
-
-    //      this.paginationFilms(this.page, this.allFilms);
-    //      let type = [...new Set(this.allFilms.map((item) => item.type))];
-    //      for (var i = 0; i < type.length; i++) {
-    //        this.typeFilm.push({ value: type[i], name: type[i] });
-    //      }
-    //    });
-    //  },
     paginationFilms(page, allFilms) {
       this.totalPages = Math.ceil(allFilms.length / this.limit);
       let startIndex = (page - 1) * this.limit;
@@ -231,6 +213,7 @@ $sm: 576px;
 $md: 768px;
 $lg: 992px;
 $xl: 1200px;
+
 //  фильтр и сортировка
 .filter-sort {
   display: flex;

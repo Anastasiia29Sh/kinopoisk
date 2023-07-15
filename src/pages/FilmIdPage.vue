@@ -5,7 +5,9 @@
       'block-none': searchNameFilm.trim() != '',
     }"
   >
-    <film-card :infoFilmId="infoFilmId"></film-card>
+    <film-card-big :infoFilmId="infoFilmId"></film-card-big>
+
+    <recommendation></recommendation>
   </div>
 
   <my-main
@@ -19,18 +21,20 @@
 
 <script>
 import MyMain from "@/pages/Main.vue";
-import FilmCard from "@/components/FilmCard.vue";
+import FilmCardBig from "@/components/FilmCardBig.vue";
+import FilmCardSmall from "@/components/FilmCardSmall.vue";
+import recommendation from "@/components/recommendationSimilarFilms.vue";
 export default {
   components: {
     MyMain,
-    FilmCard,
+    FilmCardBig,
+    FilmCardSmall,
+    recommendation,
   },
   data() {
     return {
       infoFilmId: [],
-      posterFilm: "",
-      logoFilm: "",
-      ratingFilm: "",
+      filmId: this.$route.params.id,
     };
   },
   props: {
@@ -47,12 +51,17 @@ export default {
   },
   methods: {
     getInfoFilm() {
-      this.infoFilmId = this.globalFilms.filter(
-        (f) => f.id == this.$route.params.id
-      );
+      this.infoFilmId = this.allFilms.filter((f) => f.id == this.filmId);
     },
   },
   watch: {
+    allFilms() {
+      this.getInfoFilm();
+    },
+    $route(to, from) {
+      this.filmId = this.$route.params.id;
+      window.location.reload();
+    },
     searchNameFilm() {
       let searchNameFilm = this.searchNameFilm;
       searchNameFilm = searchNameFilm.trim();
@@ -72,7 +81,6 @@ $xl: 1200px;
   padding: 50px 30px !important;
   width: 100%;
 }
-
 .block-none {
   display: none;
 }
