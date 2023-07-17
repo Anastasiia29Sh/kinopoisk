@@ -3,7 +3,7 @@ import axios from "axios";
 
 export default createStore({
   state: () => ({
-    allFilms: []
+    allFilms: [],
   }),
   mutations: {
     setAllFilms(state, allFilms){

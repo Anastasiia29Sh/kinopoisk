@@ -217,6 +217,5 @@ $xl: 1200px;
 .recommendationSimilarFilms {
   padding: 7px 7px !important;
   gap: 10px;
-  // margin-right: 3px;
 }
 </style>

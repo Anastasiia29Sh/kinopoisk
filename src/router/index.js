@@ -1,17 +1,23 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Main from '@/pages/Main.vue'
 import FilmIdPage from '@/pages/FilmIdPage.vue'
+import BookmarksEstimates from '@/pages/BookmarksEstimates.vue'
 
 const routes = [
   {
     path: '/',
     name: 'main',
-    component: Main
+    component: Main,
   },
   {
     path: '/film/:id',
     name: 'film',
     component: FilmIdPage
+  },
+  {
+    path: '/BookmarksEstimates',
+    name: 'BookmarksEstimates',
+    component: BookmarksEstimates
   },
 ]
 

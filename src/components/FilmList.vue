@@ -1,13 +1,8 @@
 <template>
   <!-- СПИСОК ФИЛЬМОВ -->
   <div class="list_film">
-    <film-card-small
-      v-for="film of films"
-      :key="film.id"
-      class="card"
-      :film="film"
-      @click="$router.push(`/film/${film.id}`)"
-    ></film-card-small>
+    <film-card-small v-for="film of films" :key="film.id" :film="film">
+    </film-card-small>
   </div>
 </template>
 

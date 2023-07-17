@@ -80,7 +80,6 @@ export default {
       ],
       isSort: 0,
       isFilter: 0,
-      isSearch: 0,
       mess: "",
     };
   },

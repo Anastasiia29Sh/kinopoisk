@@ -2,7 +2,7 @@
   <div
     class="film-id-page"
     :class="{
-      'block-none': searchNameFilm.trim() != '',
+      'block-none': isSearch == 1,
     }"
   >
     <film-card-big :infoFilmId="infoFilmId"></film-card-big>
@@ -14,7 +14,7 @@
     :allFilms="allFilms"
     ref="main"
     :class="{
-      'block-none': searchNameFilm.trim() === '',
+      'block-none': isSearch == 0,
     }"
   ></my-main>
 </template>
@@ -66,7 +66,10 @@ export default {
       let searchNameFilm = this.searchNameFilm;
       searchNameFilm = searchNameFilm.trim();
       searchNameFilm = searchNameFilm.toLowerCase();
-      if (searchNameFilm != "") this.$refs.main.searchFilms(searchNameFilm);
+      if (searchNameFilm != "") {
+        this.isSearch = 1;
+        this.$refs.main.searchFilms(searchNameFilm);
+      } else this.isSearch = 0;
     },
   },
 };

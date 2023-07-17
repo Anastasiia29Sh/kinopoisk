@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent class="d-flex">
+  <form @submit.prevent class="d-flex" id="search">
     <input
       v-model="nameFilm"
       @keyup.enter="SearchFilm"
@@ -25,6 +25,7 @@ export default {
   },
   methods: {
     SearchFilm() {
+      this.isSearch = 1;
       this.$emit("search", this.nameFilm);
     },
   },

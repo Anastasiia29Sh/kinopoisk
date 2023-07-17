@@ -1,17 +1,29 @@
 <template>
-  <div class="card">
-    <p class="rating">{{ film.rating.imdb }}</p>
-    <img :src="film.poster.url" class="card-img-top" alt="" />
-    <div class="card-body">
-      <h5
-        class="card-title"
-        data-bs-toggle="tooltip"
-        data-bs-placement="bottom"
-        :title="film.name"
-      >
-        {{ film.name }}
-      </h5>
-      <p class="card-text">{{ film.year }}, {{ film.movieLength }} мин</p>
+  <div class="cardFilm" :id="film.id">
+    <div class="card" @click="goInfoFilm(film.id)">
+      <p class="rating">{{ film.rating.imdb }}</p>
+      <img :src="film.poster.url" class="card-img-top" alt="" />
+      <div class="card-body">
+        <h5
+          class="card-title"
+          data-bs-toggle="tooltip"
+          data-bs-placement="bottom"
+          :title="film.name"
+        >
+          {{ film.name }}
+        </h5>
+        <p class="card-text">{{ film.year }}, {{ film.movieLength }} мин</p>
+      </div>
+    </div>
+    <div class="BookmarksEstimates">
+      <p class="delete" @click="deleteBookmarks(film.id)">X</p>
+      <p
+        class="myEstimates"
+        :class="{
+          myEstimatesLike: like.includes(film.id),
+          myEstimatesDislike: dislike.includes(film.id),
+        }"
+      ></p>
     </div>
   </div>
 </template>
@@ -19,10 +31,30 @@
 <script>
 export default {
   name: "FilmCardSmall",
+  data() {
+    return {
+      like: JSON.parse(localStorage.getItem("like") || "[]"),
+      dislike: JSON.parse(localStorage.getItem("dislike") || "[]"),
+    };
+  },
   props: {
     film: {
       type: Object,
       required: true,
+    },
+  },
+  methods: {
+    deleteBookmarks(idFilm) {
+      let filmBookmarks = JSON.parse(localStorage.getItem("bookmarks") || "[]");
+      filmBookmarks = filmBookmarks.filter((e) => e !== idFilm);
+      localStorage.setItem("bookmarks", JSON.stringify(filmBookmarks));
+      document.getElementById(idFilm).style.display = "none";
+    },
+    goInfoFilm(idFilm) {
+      this.isSearch = 0;
+      this.$root.searchNameFilm = "";
+      document.getElementById("search").reset();
+      this.$router.push(`/film/${idFilm}`);
     },
   },
 };
@@ -35,6 +67,42 @@ $sm: 576px;
 $md: 768px;
 $lg: 992px;
 $xl: 1200px;
+
+.cardFilm {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.delete {
+  display: none;
+  position: absolute;
+  right: -10px;
+  top: -10px;
+  background-color: #00000083;
+  border-radius: 15%;
+  padding: 2px 7px;
+  font-size: 14px;
+  &:hover {
+    background-color: #000000;
+    border: 1px solid $bg;
+  }
+}
+.myEstimates {
+  display: none;
+  position: absolute;
+  right: -10px;
+  top: -10px;
+  width: 25px;
+  height: 25px;
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+.myEstimatesLike {
+  background-image: url(../assets/like1.png);
+}
+.myEstimatesDislike {
+  background-image: url(../assets/dislike1.png);
+}
 
 .card:hover {
   cursor: pointer;
@@ -68,11 +136,11 @@ $xl: 1200px;
 .card {
   border: none;
   .rating {
-    color: #fff;
     position: absolute;
-    background-color: $bg;
     padding: 2px 7px;
     font-size: 14px;
+    color: #fff;
+    background-color: $bg;
   }
 }
 

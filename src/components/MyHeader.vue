@@ -1,10 +1,10 @@
 <template>
   <nav class="navbar navbar-expand-md navbar-dark sticky-top header">
     <div class="container-fluid">
-      <a class="navbar-brand" @click="$router.push('/')"
+      <a class="navbar-brand" @click="goMain"
         ><img src="../assets/logo_kinopoisk.png" alt=""
       /></a>
-      <a class="navbar-brand mylogo" @click="$router.push('/')">КиноПоиск</a>
+      <a class="navbar-brand mylogo" @click="goMain">КиноПоиск</a>
       <button
         class="navbar-toggle navbar-toggler"
         type="button"
@@ -16,10 +16,12 @@
       <div class="collapse navbar-collapse" id="navbarMain">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item active">
-            <a class="nav-link" @click="$router.push('/')">Главная</a>
+            <a class="nav-link" @click="goMain">Главная</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Закладки|Оценки</a>
+            <a class="nav-link" @click="goBookmarksEstimates"
+              >Закладки|Оценки</a
+            >
           </li>
         </ul>
       </div>
@@ -44,6 +46,16 @@ export default {
   methods: {
     getNameFilm(nameFilm) {
       this.$emit("searchFilms", nameFilm);
+    },
+    goMain() {
+      this.getNameFilm("");
+      document.getElementById("search").reset();
+      this.$router.push("/");
+    },
+    goBookmarksEstimates() {
+      this.getNameFilm("");
+      document.getElementById("search").reset();
+      this.$router.push("/BookmarksEstimates");
     },
   },
 };

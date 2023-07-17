@@ -31,6 +31,7 @@ export default {
     }),
     searchFilms(nameFilm) {
       this.searchNameFilm = nameFilm;
+      this.isSearch = 1;
     },
   },
   computed: {
@@ -40,9 +41,6 @@ export default {
   },
 };
 </script>
-
-
-
 
 <style lang="scss">
 $bg: #022a37;
