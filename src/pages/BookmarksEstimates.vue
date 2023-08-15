@@ -1,9 +1,9 @@
 <template>
   <div
-    class="bookmarks-estimates"
-    :class="{
-      'block-none': searchNameFilm.trim() != '',
-    }"
+    :class="[
+      'bookmarks-estimates',
+      searchNameFilm.trim() !== '' ? 'block-none' : '',
+    ]"
   >
     <nav>
       <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -41,11 +41,7 @@
         aria-labelledby="nav-bookmarks-tab"
         tabindex="0"
       >
-        <my-main
-          :allFilms="bookmarks"
-          ref="main"
-          class="bookmarksFilms"
-        ></my-main>
+        <MyMain :allFilms="bookmarks" ref="main" class="bookmarksFilms" />
       </div>
       <div
         class="tab-pane fade"
@@ -54,22 +50,18 @@
         aria-labelledby="nav-estimates-tab"
         tabindex="0"
       >
-        <my-main
-          :allFilms="estimates"
-          ref="main"
-          class="myEstimatesFilms"
-        ></my-main>
+        <MyMain :allFilms="estimates" ref="main" class="myEstimatesFilms" />
       </div>
     </div>
   </div>
 
-  <my-main
+  <MyMain
     :allFilms="allFilms"
     ref="main"
     :class="{
       'block-none': searchNameFilm.trim() === '',
     }"
-  ></my-main>
+  />
 </template>
 
 <script>
@@ -88,11 +80,9 @@ export default {
   props: {
     allFilms: {
       type: Array,
-      required: true,
+      default: () => [],
     },
-    searchNameFilm: {
-      type: String,
-    },
+    searchNameFilm: String,
   },
   mounted() {
     this.masLocalStorage["bookmarks"] = JSON.parse(
@@ -130,7 +120,7 @@ export default {
       let searchNameFilm = this.searchNameFilm;
       searchNameFilm = searchNameFilm.trim();
       searchNameFilm = searchNameFilm.toLowerCase();
-      if (searchNameFilm != "") this.$refs.main.searchFilms(searchNameFilm);
+      if (searchNameFilm !== "") this.$refs.main.searchFilms(searchNameFilm);
     },
   },
 };

@@ -1,31 +1,22 @@
 <template>
   <div class="actions-film">
     <div
-      class="add-bookmarks"
-      @click="AddBookmarks"
-      :class="{
-        'is-bookmarks': flag['isBookmarks'],
-      }"
+      :class="['add-bookmarks', flag['isBookmarks'] ? 'is-bookmarks' : '']"
+      @click="addBookmarks()"
     >
       <p></p>
       <button></button>
     </div>
     <div class="estimate">
       <button
-        class="like"
+        :class="['like', flag['isLike'] ? 'is-like' : '']"
         id="like"
-        @click="AddLike()"
-        :class="{
-          'is-like': flag['isLike'],
-        }"
+        @click="addLike()"
       ></button>
       <button
-        class="dislike"
+        :class="['dislike', flag['isDislike'] ? 'is-dislike' : '']"
         id="dislike"
-        @click="AddDislike"
-        :class="{
-          'is-dislike': flag['isDislike'],
-        }"
+        @click="addDislike()"
       ></button>
     </div>
   </div>
@@ -56,22 +47,25 @@ export default {
     this.masLocalStorage["dislike"] = JSON.parse(
       localStorage.getItem("dislike") || "[]"
     );
-
-    if (this.masLocalStorage["bookmarks"].includes(this.idFilm))
-      this.flag["isBookmarks"] = true;
-    if (this.masLocalStorage["like"].includes(this.idFilm))
-      this.flag["isLike"] = true;
-    if (this.masLocalStorage["dislike"].includes(this.idFilm))
-      this.flag["isDislike"] = true;
+  },
+  watch: {
+    idFilm() {
+      if (this.masLocalStorage["bookmarks"].includes(this.idFilm))
+        this.flag["isBookmarks"] = true;
+      if (this.masLocalStorage["like"].includes(this.idFilm))
+        this.flag["isLike"] = true;
+      if (this.masLocalStorage["dislike"].includes(this.idFilm))
+        this.flag["isDislike"] = true;
+    },
   },
   methods: {
-    AddBookmarks() {
+    addBookmarks() {
       this.saveLocalStorage("bookmarks", "isBookmarks");
     },
-    AddLike() {
+    addLike() {
       this.saveLocalStorage("like", "isLike");
     },
-    AddDislike() {
+    addDislike() {
       this.saveLocalStorage("dislike", "isDislike");
     },
 
@@ -83,18 +77,18 @@ export default {
           nameStorage
         ].filter((e) => e !== this.idFilm);
         this.flag[nameFlag] = false;
-        var but = document.getElementById("like");
+        let but = document.getElementById("like");
         but.disabled = false;
-        var but1 = document.getElementById("dislike");
+        let but1 = document.getElementById("dislike");
         but1.disabled = false;
       } else {
         this.masLocalStorage[nameStorage].push(this.idFilm);
         this.flag[nameFlag] = true;
-        if (nameFlag == "isLike") {
-          var but = document.getElementById("dislike");
+        if (nameFlag === "isLike") {
+          let but = document.getElementById("dislike");
           but.disabled = true;
-        } else if (nameFlag == "isDislike") {
-          var but = document.getElementById("like");
+        } else if (nameFlag === "isDislike") {
+          let but = document.getElementById("like");
           but.disabled = true;
         }
       }

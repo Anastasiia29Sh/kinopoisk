@@ -1,8 +1,7 @@
 <template>
   <!-- СПИСОК ФИЛЬМОВ -->
   <div class="list_film">
-    <film-card-small v-for="film of films" :key="film.id" :film="film">
-    </film-card-small>
+    <FilmCardSmall v-for="film of films" :key="film.id" :film="film" />
   </div>
 </template>
 
@@ -16,7 +15,7 @@ export default {
   props: {
     films: {
       type: Array,
-      required: true,
+      default: () => [],
     },
   },
 };

@@ -2,11 +2,8 @@
   <nav aria-label="Page navigation example" class="pageNav">
     <ul class="pagination">
       <li
-        class="page-item"
         @click="page > 1 ? changePage(page - 1) : null"
-        :class="{
-          'item-disabled': page === 1,
-        }"
+        :class="['page-item', page === 1 ? 'item-disabled' : '']"
       >
         <a
           class="page-link"
@@ -28,28 +25,19 @@
         }"
       >
         <a
-          class="page-link"
-          :class="{
-            'current-page': page === pageNumber,
-          }"
+          :class="['page-link', page === pageNumber ? 'current-page' : '']"
           href="#"
           >{{ pageNumber }}</a
         >
       </li>
       <li
-        class="page-item"
+        :class="['page-item', page === totalPages ? 'item-disabled' : '']"
         @click="page < totalPages ? changePage(page + 1) : null"
-        :class="{
-          'item-disabled': page === totalPages,
-        }"
       >
         <a
-          class="page-link"
+          :class="['page-link', page === totalPages ? 'link-disabled' : '']"
           href="#"
           aria-label="Next"
-          :class="{
-            'link-disabled': page === totalPages,
-          }"
         >
           <span aria-hidden="true">&raquo;</span>
         </a>
@@ -60,14 +48,10 @@
 
 <script>
 export default {
-  name: "Pagination",
+  name: "BasePagination",
   props: {
-    page: {
-      required: true,
-    },
-    totalPages: {
-      required: true,
-    },
+    page: Number,
+    totalPages: Number,
   },
   methods: {
     changePage(pageNumber) {

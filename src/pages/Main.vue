@@ -1,65 +1,55 @@
 <template>
   <div>
     <!-- фильтр и сортировка -->
-    <div
-      class="filter-sort"
-      :class="{
-        'block-none': isSearch === 1,
-      }"
-    >
+    <div :class="['filter-sort', isSearch === 1 ? 'block-none' : '']">
       <div class="filter">
-        <my-select
+        <SelectWithDisabledOption
           v-model="selectedFilter"
           :options="typeFilm"
           :nameSelect="nameSelect[0]"
           class="filter-select"
-        ></my-select>
+        />
       </div>
       <div class="sort">
-        <my-select
+        <SelectWithDisabledOption
           v-model="selectedSort"
           :options="sortOptions"
           :nameSelect="nameSelect[1]"
           class="sort-select"
-        ></my-select>
+        />
       </div>
     </div>
 
-    <p
-      class="mess"
-      :class="{
-        'mess-none': mess === '',
-      }"
-    >
+    <p :class="['mess', mess === '' ? 'block-none' : '']">
       {{ mess }}
     </p>
 
     <!-- список фильмов -->
-    <film-list :films="films"></film-list>
+    <FilmList :films="films" />
 
     <!-- пагинация -->
-    <pagination
+    <BasePagination
       :page="page"
       :totalPages="totalPages"
       @change="changePage"
       :class="{
         'block-none': totalPages <= 1,
       }"
-    ></pagination>
+    ></BasePagination>
   </div>
 </template>
 
 
 <script>
 import FilmList from "@/components/FilmList.vue";
-import Pagination from "@/components/Pagination.vue";
-import MySelect from "@/components/UI/MySelect.vue";
+import BasePagination from "@/components/BasePagination.vue";
+import SelectWithDisabledOption from "@/components/UI/SelectWithDisabledOption.vue";
 import MyHeader from "@/components/MyHeader.vue";
 export default {
   components: {
     FilmList,
-    Pagination,
-    MySelect,
+    BasePagination,
+    SelectWithDisabledOption,
     MyHeader,
   },
   data() {
@@ -67,7 +57,7 @@ export default {
       films: [],
       allFilmSort: [],
       page: 1,
-      limit: 25,
+      filmsPerPage: 25,
       totalPages: 0,
       typeFilm: [{ value: "all", name: "all" }],
       selectedFilter: "",
@@ -80,26 +70,35 @@ export default {
       ],
       isSort: 0,
       isFilter: 0,
+      isSearch: this.isSearch,
       mess: "",
     };
   },
   props: {
     allFilms: {
       type: Array,
-      required: true,
+      default: () => [],
     },
-    searchNameFilm: {
-      type: String,
-    },
+    searchNameFilm: String,
   },
   mounted() {
     this.outputListFilms();
   },
+  computed: {
+    getTotalPages() {
+      if (this.isSort === 1 || this.isFilter === 1 || this.isSearch === 1)
+        this.totalPages = Math.ceil(
+          this.allFilmSort.length / this.filmsPerPage
+        );
+      else
+        this.totalPages = Math.ceil(this.allFilms.length / this.filmsPerPage);
+    },
+  },
   methods: {
     paginationFilms(page, allFilms) {
-      this.totalPages = Math.ceil(allFilms.length / this.limit);
-      let startIndex = (page - 1) * this.limit;
-      let endIndex = page * this.limit;
+      this.getTotalPages;
+      let startIndex = (page - 1) * this.filmsPerPage;
+      let endIndex = page * this.filmsPerPage;
       this.films = allFilms.filter(
         (f) =>
           allFilms.indexOf(f) >= startIndex && allFilms.indexOf(f) < endIndex
@@ -111,7 +110,7 @@ export default {
     outputListFilms() {
       this.paginationFilms(this.page, this.allFilms);
       let type = [...new Set(this.allFilms.map((item) => item.type))];
-      for (var i = 0; i < type.length; i++) {
+      for (let i = 0; i < type.length; i++) {
         this.typeFilm.push({ value: type[i], name: type[i] });
       }
     },
@@ -125,7 +124,7 @@ export default {
         (f) => this.checkNameFilm(f.name, nameFilm) > 0
       );
       this.paginationFilms(this.page, this.allFilmSort);
-      if (this.allFilmSort.length == 0)
+      if (this.allFilmSort.length === 0)
         this.mess = "По Вашему запросу ничего не найдено";
       else this.mess = "";
     },
@@ -144,7 +143,7 @@ export default {
       let searchNameFilm = this.searchNameFilm;
       searchNameFilm = searchNameFilm.trim();
       searchNameFilm = searchNameFilm.toLowerCase();
-      if (searchNameFilm != "") this.searchFilms(searchNameFilm);
+      if (searchNameFilm !== "") this.searchFilms(searchNameFilm);
       else {
         this.isSearch = 0;
         this.mess = "";
@@ -155,7 +154,7 @@ export default {
       this.outputListFilms();
     },
     page() {
-      if (this.isSort == 0 && this.isFilter == 0 && this.isSearch == 0) {
+      if (this.isSort === 0 && this.isFilter === 0 && this.isSearch === 0) {
         this.paginationFilms(this.page, this.allFilms);
       } else {
         this.paginationFilms(this.page, this.allFilmSort);
@@ -164,7 +163,7 @@ export default {
     selectedFilter(newValue) {
       this.isFilter = 1;
       let allFilmSort = Array.from(this.allFilms);
-      if (newValue != "all" && newValue != "") {
+      if (newValue !== "all" && newValue !== "") {
         this.allFilmSort = allFilmSort.filter((f) => f.type === newValue);
       } else {
         this.isFilter = 0;
@@ -172,14 +171,14 @@ export default {
       }
       this.selectedSort = "";
       this.page = 1;
-      if (this.allFilmSort.length == 0)
+      if (this.allFilmSort.length === 0)
         this.mess = "По Вашему запросу ничего не найдено";
       this.paginationFilms(this.page, this.allFilmSort);
     },
     selectedSort(newValue) {
       this.isSort = 1;
       let allFilmSort = [];
-      if (this.isFilter == 1) {
+      if (this.isFilter === 1) {
         allFilmSort = Array.from(this.allFilmSort);
       } else allFilmSort = Array.from(this.allFilms);
       if (newValue === "year") {
@@ -200,9 +199,6 @@ export default {
   },
 };
 </script>
-
-
-
 
 <style lang="scss">
 $bg: #022a37;
@@ -246,8 +242,5 @@ $xl: 1200px;
   color: #fff;
   padding: 30px 30px 10px 30px !important;
   text-align: center;
-}
-.mess-none {
-  display: none;
 }
 </style>

@@ -1,18 +1,18 @@
 <template>
-  <form @submit.prevent class="d-flex" id="search">
+  <div class="form-search d-flex">
     <input
       v-model="nameFilm"
-      @keyup.enter="SearchFilm"
+      @keyup.enter="searchFilm"
+      @update:model-value="searchFilm"
       class="form-control mr-2"
       type="text"
       placeholder="поиск..."
       aria-label="Search"
       name="nameFilm"
+      id="search"
     />
-    <button @click="SearchFilm" class="btn btn-outline-success" type="submit">
-      Найти
-    </button>
-  </form>
+    <button @click="searchFilm" class="btn btn-outline-success">Найти</button>
+  </div>
 </template>
 
 <script>
@@ -21,17 +21,13 @@ export default {
   data() {
     return {
       nameFilm: "",
+      isSearch: this.isSearch,
     };
   },
   methods: {
-    SearchFilm() {
+    searchFilm() {
       this.isSearch = 1;
       this.$emit("search", this.nameFilm);
-    },
-  },
-  watch: {
-    nameFilm() {
-      this.SearchFilm();
     },
   },
 };
@@ -45,7 +41,7 @@ $sm: 576px;
 $md: 768px;
 $lg: 992px;
 $xl: 1200px;
-input {
+.form-search input {
   background-color: #01232e9c;
   border: none;
   margin-right: 5px;
@@ -56,45 +52,45 @@ input {
   -moz-box-shadow: 8px 4px 8px 4px rgba(0, 0, 0, 0.3) inset;
   box-shadow: 8px 4px 8px 4px rgba(0, 0, 0, 0.3) inset;
 }
-button {
+.form-search button {
   color: #fff;
   border: none;
   font-size: 18px;
   background-color: $bg2;
 }
-button:hover {
+.form-search button:hover {
   background-color: $bg2;
 }
 @media screen and (min-width: $md) and (max-width: $xl) {
-  input {
+  .form-search input {
     width: 200px;
     font-size: 16px;
   }
-  button {
+  .form-search button {
     font-size: 16px;
   }
 }
 @media screen and (min-width: $sm) and (max-width: $md) {
-  form {
+  .form-search {
     justify-content: space-between;
   }
-  input {
+  .form-search input {
     width: 100%;
     font-size: 16px;
   }
-  button {
+  .form-search button {
     font-size: 14px;
   }
 }
 @media screen and (max-width: $sm) {
-  form {
+  .form-search {
     justify-content: space-between;
   }
-  input {
+  .form-search input {
     width: 100%;
     font-size: 14px;
   }
-  button {
+  .form-search button {
     font-size: 12px;
   }
 }

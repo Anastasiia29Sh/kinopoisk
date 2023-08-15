@@ -1,30 +1,30 @@
 <template>
-  <div class="all-info-film" v-for="film of infoFilmId" :key="film.id">
+  <div class="all-info-film">
     <div class="row1">
       <div class="logo-infa">
         <div class="logo-film">
-          <img :src="film.logo.url" alt="" />
+          <img :src="logoFilm" alt="" />
         </div>
         <div class="infa">
           <p>
-            {{ film.rating.imdb }} {{ film.year }}г. {{ film.type }}
-            {{ film.movieLength }}мин.
+            {{ ratingFilm }} {{ infoFilmId.year }}г. {{ infoFilmId.type }}
+            {{ infoFilmId.movieLength }}мин.
           </p>
-          <h2>{{ film.name }} ( {{ film.alternativeName }} )</h2>
-          <p>{{ film.shortDescription }}</p>
+          <h2>{{ infoFilmId.name }} ( {{ infoFilmId.alternativeName }} )</h2>
+          <p>{{ infoFilmId.shortDescription }}</p>
           <p class="description">Описание:</p>
-          <p class="description">{{ film.description }}</p>
+          <p class="description">{{ infoFilmId.description }}</p>
         </div>
-        <actions-film :idFilm="film.id" class="actions-film"></actions-film>
+        <ActionsFilm :idFilm="infoFilmId.id" class="actions-film"></ActionsFilm>
       </div>
       <div class="poster">
-        <img :src="film.poster.url" alt="" />
-        <actions-film :idFilm="film.id" class="actions-film"></actions-film>
+        <img :src="posterFilm" alt="" />
+        <ActionsFilm :idFilm="infoFilmId.id" class="actions-film"></ActionsFilm>
       </div>
     </div>
     <div class="small-block-info">
       <p class="description1">Описание:</p>
-      <p class="description1">{{ film.description }}</p>
+      <p class="description1">{{ infoFilmId.description }}</p>
     </div>
   </div>
 </template>
@@ -36,10 +36,21 @@ export default {
   components: {
     ActionsFilm,
   },
+  data() {
+    return {
+      logoFilm: "",
+      ratingFilm: 0,
+      posterFilm: "",
+    };
+  },
   props: {
-    infoFilmId: {
-      type: Array,
-      required: true,
+    infoFilmId: Object,
+  },
+  watch: {
+    infoFilmId() {
+      this.logoFilm = this.infoFilmId.logo.url;
+      this.ratingFilm = this.infoFilmId.rating.imdb;
+      this.posterFilm = this.infoFilmId.poster.url;
     },
   },
 };

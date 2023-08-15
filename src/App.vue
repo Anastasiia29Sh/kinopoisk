@@ -1,7 +1,7 @@
 <template>
   <div class="app">
     <!-- шапка сайта -->
-    <my-header @searchFilms="searchFilms"></my-header>
+    <MyHeader @searchFilms="searchFilms" />
     <router-view
       :allFilms="_allFilms"
       :searchNameFilm="searchNameFilm"
@@ -20,6 +20,7 @@ export default {
   data() {
     return {
       searchNameFilm: "",
+      isSearch: this.isSearch,
     };
   },
   mounted() {

@@ -1,5 +1,9 @@
 <template>
-  <select class="form-select" :value="modelValue" @change="changeOption">
+  <select
+    class="select-with-disabled-option form-select"
+    :value="modelValue"
+    @change="changeOption"
+  >
     <option disabled value="">{{ nameSelect }}</option>
     <option v-for="option of options" :key="option.value" :value="option.value">
       {{ option.name }}
@@ -9,16 +13,16 @@
 
 <script>
 export default {
-  name: "MySelect",
+  name: "SelectWithDisabledOption",
   props: {
-    modelValue: {
-      type: String,
-    },
+    modelValue: String,
     options: {
       type: Array,
+      default: () => [],
     },
     nameSelect: {
       type: String,
+      default: "--Не выбрано--",
     },
   },
   methods: {
@@ -36,22 +40,22 @@ $sm: 576px;
 $md: 768px;
 $lg: 992px;
 $xl: 1200px;
-select {
+.select-with-disabled-option {
   background-color: $bg;
   color: #fff;
   border: 1px solid #ffffff7c;
 }
-select:focus {
+.select-with-disabled-option:focus {
   border: 1px solid $bg2;
   box-shadow: none;
 }
 @media screen and (min-width: $sm) and (max-width: $md) {
-  select {
+  .select-with-disabled-option {
     font-size: 14px;
   }
 }
 @media screen and (max-width: $sm) {
-  select {
+  .select-with-disabled-option {
     font-size: 12px;
   }
 }

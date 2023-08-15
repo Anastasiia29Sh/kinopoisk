@@ -38,10 +38,7 @@ export default {
     };
   },
   props: {
-    film: {
-      type: Object,
-      required: true,
-    },
+    film: Object,
   },
   methods: {
     deleteBookmarks(idFilm) {
@@ -53,7 +50,7 @@ export default {
     goInfoFilm(idFilm) {
       this.isSearch = 0;
       this.$root.searchNameFilm = "";
-      document.getElementById("search").reset();
+      document.getElementById("search").value = "";
       this.$router.push(`/film/${idFilm}`);
     },
   },

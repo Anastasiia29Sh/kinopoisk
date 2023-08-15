@@ -3,10 +3,7 @@
     <h3>Рекомендуем посмотреть</h3>
     <carousel :items-to-show="1.5">
       <slide v-for="films of similarFilms" :key="similarFilms.indexOf(films)">
-        <film-list
-          :films="films"
-          class="recommendationSimilarFilms"
-        ></film-list>
+        <FilmList :films="films" class="recommendationSimilarFilms" />
       </slide>
       <template #addons>
         <navigation />
@@ -52,9 +49,9 @@ export default {
     },
     getSimilarFilms() {
       this.infoFilmId = this._allFilms.filter(
-        (f) => f.id == this.$route.params.id
+        (f) => f.id === parseInt(this.$route.params.id)
       );
-      var similarFilms = this.recommendationSimilarFilms();
+      let similarFilms = this.recommendationSimilarFilms();
       let n = 0;
       if (this.sizeWimdow <= 576) n = 3;
       else if (this.sizeWimdow > 576 && this.sizeWimdow <= 768) n = 4;
@@ -62,28 +59,28 @@ export default {
       else n = 6;
       this.similarFilms = this.sliceIntoChunks(similarFilms, n);
     },
-    RatingLengthSimilarFilms(similarFilmsId) {
+    ratingLengthSimilarFilms(similarFilmsId) {
       let rating = this.infoFilmId[0].rating.imdb;
       let movieLength = this.infoFilmId[0].movieLength;
-      let RatingLengthSimilarFilms = this._allFilms.filter(
+      let ratingLengthSimilarFilms = this._allFilms.filter(
         (f) =>
           !similarFilmsId.includes(f.id) &&
-          f.id != this.infoFilmId[0].id &&
+          f.id !== this.infoFilmId[0].id &&
           ((f.rating.imdb >= rating - 1.0 && f.rating.imdb <= rating + 1.0) ||
             (f.movieLength >= movieLength - 10 &&
               f.movieLength <= movieLength + 10))
       );
-      return RatingLengthSimilarFilms;
+      return ratingLengthSimilarFilms;
     },
     recommendationSimilarFilms() {
-      var txtMain = [
+      let txtMain = [
         this.infoFilmId[0].description,
         this.infoFilmId[0].shortDescription,
       ].join(" ");
-      var similarFilmsMap = new Map();
+      let similarFilmsMap = new Map();
       for (let i = 0; i < this._allFilms.length; i++) {
-        if (this._allFilms[i].id == this.infoFilmId[0].id) continue;
-        var cosSimilarity = this.textCosineSimilarity(
+        if (this._allFilms[i].id === this.infoFilmId[0].id) continue;
+        let cosSimilarity = this.textCosineSimilarity(
           txtMain,
           [
             this._allFilms[i].description,
@@ -98,27 +95,27 @@ export default {
       );
       let similarFilmsId = [];
       let c = 0;
-      for (var [key, value] of similarFilmsMap) {
+      for (let [key, value] of similarFilmsMap) {
         if (c < 10) similarFilmsId.push(key);
         c++;
       }
-      var similarFilms = [];
+      let similarFilms = [];
       similarFilms = this._allFilms.filter((f) =>
         similarFilmsId.includes(f.id)
       );
       // рекомендации по рейтингу и хронометражу
-      if (similarFilms.length != 10) {
-        let RatingLengthSimilarFilms =
-          this.RatingLengthSimilarFilms(similarFilmsId);
-        RatingLengthSimilarFilms.forEach((el) => {
-          if (similarFilms.length != 10) similarFilms.push(el);
+      if (similarFilms.length !== 10) {
+        let ratingLengthSimilarFilms =
+          this.ratingLengthSimilarFilms(similarFilmsId);
+        ratingLengthSimilarFilms.forEach((el) => {
+          if (similarFilms.length !== 10) similarFilms.push(el);
         });
       }
       return similarFilms;
     },
-    textCosineSimilarity(txt1, txt2) {
-      var txt1 = this.cleanText(txt1);
-      var txt2 = this.cleanText(txt2);
+    textCosineSimilarity(txt11, txt22) {
+      let txt1 = this.cleanText(txt11);
+      let txt2 = this.cleanText(txt22);
       const wordCount1 = this.wordCountMap(txt1);
       const wordCount2 = this.wordCountMap(txt2);
       // объединение слов из txt1 и txt2 в один словарь dict

@@ -1,10 +1,12 @@
 <template>
   <nav class="navbar navbar-expand-md navbar-dark sticky-top header">
     <div class="container-fluid">
-      <a class="navbar-brand" @click="goMain"
-        ><img src="../assets/logo_kinopoisk.png" alt=""
-      /></a>
-      <a class="navbar-brand mylogo" @click="goMain">КиноПоиск</a>
+      <router-link to="/" class="navbar-brand" @click="cleanSearchInput">
+        <img src="../assets/logo_kinopoisk.png" alt="" />
+      </router-link>
+      <router-link to="/" class="navbar-brand mylogo" @click="cleanSearchInput"
+        >КиноПоиск</router-link
+      >
       <button
         class="navbar-toggle navbar-toggler"
         type="button"
@@ -16,23 +18,28 @@
       <div class="collapse navbar-collapse" id="navbarMain">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item active">
-            <a class="nav-link" @click="goMain">Главная</a>
+            <router-link to="/" class="nav-link" @click="cleanSearchInput"
+              >Главная</router-link
+            >
           </li>
           <li class="nav-item">
-            <a class="nav-link" @click="goBookmarksEstimates"
-              >Закладки|Оценки</a
+            <router-link
+              to="/BookmarksEstimates"
+              class="nav-link"
+              @click="cleanSearchInput"
+              >Закладки|Оценки</router-link
             >
           </li>
         </ul>
       </div>
 
       <div class="d-none d-md-block search-film">
-        <form-search @search="getNameFilm"></form-search>
+        <FormSearch @search="getNameFilm" />
       </div>
     </div>
   </nav>
   <div class="d-block d-md-none search-film search-film-small">
-    <form-search @search="getNameFilm"></form-search>
+    <FormSearch @search="getNameFilm" />
   </div>
 </template>
 
@@ -47,15 +54,9 @@ export default {
     getNameFilm(nameFilm) {
       this.$emit("searchFilms", nameFilm);
     },
-    goMain() {
+    cleanSearchInput() {
       this.getNameFilm("");
-      document.getElementById("search").reset();
-      this.$router.push("/");
-    },
-    goBookmarksEstimates() {
-      this.getNameFilm("");
-      document.getElementById("search").reset();
-      this.$router.push("/BookmarksEstimates");
+      document.getElementById("search").value = "";
     },
   },
 };
