@@ -2,7 +2,7 @@
   <div class="actions-film">
     <div
       :class="['add-bookmarks', flag['isBookmarks'] ? 'is-bookmarks' : '']"
-      @click="addBookmarks()"
+      @click="actBookmarks()"
     >
       <p></p>
       <button></button>
@@ -11,18 +11,19 @@
       <button
         :class="['like', flag['isLike'] ? 'is-like' : '']"
         id="like"
-        @click="addLike()"
+        @click="actLikes()"
       ></button>
       <button
         :class="['dislike', flag['isDislike'] ? 'is-dislike' : '']"
         id="dislike"
-        @click="addDislike()"
+        @click="actDislikes()"
       ></button>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState, mapActions } from "vuex";
 export default {
   name: "ActionsFilm",
   props: {
@@ -33,69 +34,69 @@ export default {
   },
   data() {
     return {
-      masLocalStorage: { bookmarks: [], like: [], dislike: [] },
       flag: { isBookmarks: false, isLike: false, isDislike: false },
     };
   },
-  mounted() {
-    this.masLocalStorage["bookmarks"] = JSON.parse(
-      localStorage.getItem("bookmarks") || "[]"
-    );
-    this.masLocalStorage["like"] = JSON.parse(
-      localStorage.getItem("like") || "[]"
-    );
-    this.masLocalStorage["dislike"] = JSON.parse(
-      localStorage.getItem("dislike") || "[]"
-    );
+  computed: {
+    ...mapState({
+      allBookmarks: (state) => state.businessLogicBookmarks.bookmarks,
+      allLikes: (state) => state.businessLogicLike.like,
+      allDislikes: (state) => state.businessLogicDislike.dislike,
+    }),
   },
   watch: {
     idFilm() {
-      if (this.masLocalStorage["bookmarks"].includes(this.idFilm))
+      if (this.allBookmarks.includes(this.idFilm))
         this.flag["isBookmarks"] = true;
-      if (this.masLocalStorage["like"].includes(this.idFilm))
-        this.flag["isLike"] = true;
-      if (this.masLocalStorage["dislike"].includes(this.idFilm))
-        this.flag["isDislike"] = true;
+      if (this.allLikes.includes(this.idFilm)) this.flag["isLike"] = true;
+      if (this.allDislikes.includes(this.idFilm)) this.flag["isDislike"] = true;
     },
   },
   methods: {
-    addBookmarks() {
-      this.saveLocalStorage("bookmarks", "isBookmarks");
-    },
-    addLike() {
-      this.saveLocalStorage("like", "isLike");
-    },
-    addDislike() {
-      this.saveLocalStorage("dislike", "isDislike");
-    },
-
-    saveLocalStorage(nameStorage, nameFlag) {
-      if (this.masLocalStorage[nameStorage].includes(this.idFilm))
-        this.flag[nameFlag] = true;
-      if (this.flag[nameFlag]) {
-        this.masLocalStorage[nameStorage] = this.masLocalStorage[
-          nameStorage
-        ].filter((e) => e !== this.idFilm);
-        this.flag[nameFlag] = false;
-        let but = document.getElementById("like");
-        but.disabled = false;
-        let but1 = document.getElementById("dislike");
-        but1.disabled = false;
+    ...mapActions({
+      addBookmarks: "addBookmarks",
+      deleteBookmarks: "deleteBookmarks",
+      addLike: "addLike",
+      deleteLike: "deleteLike",
+      addDislike: "addDislike",
+      deleteDislike: "deleteDislike",
+    }),
+    actBookmarks() {
+      if (this.allBookmarks.includes(this.idFilm))
+        this.flag["isBookmarks"] = true;
+      if (this.flag["isBookmarks"]) {
+        this.deleteBookmarks(this.idFilm);
+        this.flag["isBookmarks"] = false;
       } else {
-        this.masLocalStorage[nameStorage].push(this.idFilm);
-        this.flag[nameFlag] = true;
-        if (nameFlag === "isLike") {
-          let but = document.getElementById("dislike");
-          but.disabled = true;
-        } else if (nameFlag === "isDislike") {
-          let but = document.getElementById("like");
-          but.disabled = true;
-        }
+        this.addBookmarks(this.idFilm);
+        this.flag["isBookmarks"] = true;
       }
-      localStorage.setItem(
-        nameStorage,
-        JSON.stringify(this.masLocalStorage[nameStorage])
-      );
+    },
+    actLikes() {
+      if (this.allLikes.includes(this.idFilm)) this.flag["isLike"] = true;
+      if (this.flag["isLike"]) {
+        this.deleteLike(this.idFilm);
+        this.flag["isLike"] = false;
+        document.getElementById("like").disabled = false;
+        document.getElementById("dislike").disabled = false;
+      } else {
+        this.addLike(this.idFilm);
+        this.flag["isLike"] = true;
+        document.getElementById("dislike").disabled = true;
+      }
+    },
+    actDislikes() {
+      if (this.allDislikes.includes(this.idFilm)) this.flag["isDislike"] = true;
+      if (this.flag["isDislike"]) {
+        this.deleteDislike(this.idFilm);
+        this.flag["isDislike"] = false;
+        document.getElementById("like").disabled = false;
+        document.getElementById("dislike").disabled = false;
+      } else {
+        this.addDislike(this.idFilm);
+        this.flag["isDislike"] = true;
+        document.getElementById("like").disabled = true;
+      }
     },
   },
 };

@@ -66,6 +66,7 @@
 
 <script>
 import MyMain from "@/pages/Main.vue";
+import { mapState, mapActions } from "vuex";
 export default {
   components: {
     MyMain,
@@ -84,30 +85,26 @@ export default {
     },
     searchNameFilm: String,
   },
+  computed: {
+    ...mapState({
+      allBookmarks: (state) => state.businessLogicBookmarks.bookmarks,
+      allLikes: (state) => state.businessLogicLike.like,
+      allDislikes: (state) => state.businessLogicDislike.dislike,
+    }),
+  },
   mounted() {
-    this.masLocalStorage["bookmarks"] = JSON.parse(
-      localStorage.getItem("bookmarks") || "[]"
-    );
-    this.masLocalStorage["like"] = JSON.parse(
-      localStorage.getItem("like") || "[]"
-    );
-    this.masLocalStorage["dislike"] = JSON.parse(
-      localStorage.getItem("dislike") || "[]"
-    );
     this.getBookmarks();
     this.getEstimates();
   },
   methods: {
     getBookmarks() {
       this.bookmarks = this.allFilms.filter((f) =>
-        this.masLocalStorage["bookmarks"].includes(f.id)
+        this.allBookmarks.includes(f.id)
       );
     },
     getEstimates() {
       this.estimates = this.allFilms.filter(
-        (f) =>
-          this.masLocalStorage["like"].includes(f.id) ||
-          this.masLocalStorage["dislike"].includes(f.id)
+        (f) => this.allLikes.includes(f.id) || this.allDislikes.includes(f.id)
       );
     },
   },

@@ -16,12 +16,12 @@
       </div>
     </div>
     <div class="BookmarksEstimates">
-      <p class="delete" @click="deleteBookmarks(film.id)">X</p>
+      <p class="delete" @click="delBookmarks(film.id)">X</p>
       <p
         class="myEstimates"
         :class="{
-          myEstimatesLike: like.includes(film.id),
-          myEstimatesDislike: dislike.includes(film.id),
+          myEstimatesLike: allLikes.includes(film.id),
+          myEstimatesDislike: allDislikes.includes(film.id),
         }"
       ></p>
     </div>
@@ -29,22 +29,30 @@
 </template>
 
 <script>
+import { mapState, mapActions } from "vuex";
 export default {
   name: "FilmCardSmall",
   data() {
     return {
-      like: JSON.parse(localStorage.getItem("like") || "[]"),
-      dislike: JSON.parse(localStorage.getItem("dislike") || "[]"),
+      isSearch: this.isSearch,
     };
   },
   props: {
     film: Object,
   },
+  computed: {
+    ...mapState({
+      allBookmarks: (state) => state.businessLogicBookmarks.bookmarks,
+      allLikes: (state) => state.businessLogicLike.like,
+      allDislikes: (state) => state.businessLogicDislike.dislike,
+    }),
+  },
   methods: {
-    deleteBookmarks(idFilm) {
-      let filmBookmarks = JSON.parse(localStorage.getItem("bookmarks") || "[]");
-      filmBookmarks = filmBookmarks.filter((e) => e !== idFilm);
-      localStorage.setItem("bookmarks", JSON.stringify(filmBookmarks));
+    ...mapActions({
+      deleteBookmarks: "deleteBookmarks",
+    }),
+    delBookmarks(idFilm) {
+      this.deleteBookmarks(idFilm);
       document.getElementById(idFilm).style.display = "none";
     },
     goInfoFilm(idFilm) {

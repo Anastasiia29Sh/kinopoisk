@@ -1,5 +1,8 @@
 import { createStore } from 'vuex';
 import axios from "axios";
+import businessLogicBookmarks from "./modules/BusinessLogicBookmarks";
+import businessLogicLike from "./modules/BusinessLogicLike";
+import businessLogicDislike from "./modules/BusinessLogicDislike";
 
 export default createStore({
   state: () => ({
@@ -16,5 +19,10 @@ export default createStore({
         commit('setAllFilms', res.data);
       });
     },
+  },
+  modules:{
+    businessLogicBookmarks: businessLogicBookmarks,
+    businessLogicLike: businessLogicLike,
+    businessLogicDislike: businessLogicDislike
   }
 });
