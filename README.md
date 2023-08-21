@@ -17,7 +17,8 @@ npm run build
 
 ### Start JSON Server
 ```
-json-server kinopoisk.json
+npm i -g json-server
+npm run json-server
 ```
 
 ### Customize configuration
