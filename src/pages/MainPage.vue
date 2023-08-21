@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- фильтр и сортировка -->
-    <div :class="['filter-sort', isSearch === 1 ? 'block-none' : '']">
+    <div :class="['filter-sort', isSearch ? 'block-none' : '']">
       <div class="filter">
         <SelectWithDisabledOption
           v-model="selectedFilter"
@@ -68,9 +68,9 @@ export default {
         { value: "rating", name: "По рейтингу" },
         { value: "movieLength", name: "По хронометражу" },
       ],
-      isSort: 0,
-      isFilter: 0,
-      isSearch: this.isSearch,
+      isSort: false,
+      isFilter: false,
+      isSearch: false,
       mess: "",
     };
   },
@@ -86,7 +86,7 @@ export default {
   },
   computed: {
     getTotalPages() {
-      if (this.isSort === 1 || this.isFilter === 1 || this.isSearch === 1)
+      if (this.isSort || this.isFilter || this.isSearch)
         this.totalPages = Math.ceil(
           this.allFilmSort.length / this.filmsPerPage
         );
@@ -115,9 +115,9 @@ export default {
       }
     },
     searchFilms(nameFilm) {
-      this.isSearch = 1;
-      this.isFilter = 0;
-      this.isSort = 0;
+      this.isSearch = true;
+      this.isFilter = false;
+      this.isSort = false;
       this.page = 1;
       let allFilmSort = Array.from(this.allFilms);
       this.allFilmSort = allFilmSort.filter(
@@ -145,7 +145,7 @@ export default {
       searchNameFilm = searchNameFilm.toLowerCase();
       if (searchNameFilm !== "") this.searchFilms(searchNameFilm);
       else {
-        this.isSearch = 0;
+        this.isSearch = false;
         this.mess = "";
         this.paginationFilms(this.page, this.allFilms);
       }
@@ -154,19 +154,19 @@ export default {
       this.outputListFilms();
     },
     page() {
-      if (this.isSort === 0 && this.isFilter === 0 && this.isSearch === 0) {
+      if (!this.isSort && !this.isFilter && !this.isSearch) {
         this.paginationFilms(this.page, this.allFilms);
       } else {
         this.paginationFilms(this.page, this.allFilmSort);
       }
     },
     selectedFilter(newValue) {
-      this.isFilter = 1;
+      this.isFilter = true;
       let allFilmSort = Array.from(this.allFilms);
       if (newValue !== "all" && newValue !== "") {
         this.allFilmSort = allFilmSort.filter((f) => f.type === newValue);
       } else {
-        this.isFilter = 0;
+        this.isFilter = false;
         this.allFilmSort = allFilmSort;
       }
       this.selectedSort = "";
@@ -176,9 +176,9 @@ export default {
       this.paginationFilms(this.page, this.allFilmSort);
     },
     selectedSort(newValue) {
-      this.isSort = 1;
+      this.isSort = true;
       let allFilmSort = [];
-      if (this.isFilter === 1) {
+      if (this.isFilter) {
         allFilmSort = Array.from(this.allFilmSort);
       } else allFilmSort = Array.from(this.allFilms);
       if (newValue === "year") {

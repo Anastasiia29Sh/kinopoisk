@@ -1,5 +1,5 @@
 <template>
-  <div :class="['film-id-page', isSearch === 1 ? 'block-none' : '']">
+  <div :class="['film-id-page', isSearch ? 'block-none' : '']">
     <FilmCardBig :infoFilmId="infoFilmId" />
     <RecommendationFilms />
   </div>
@@ -8,13 +8,13 @@
     :allFilms="allFilms"
     ref="main"
     :class="{
-      'block-none': isSearch === 0,
+      'block-none': !isSearch,
     }"
   />
 </template>
 
 <script>
-import MyMain from "@/pages/Main.vue";
+import MyMain from "@/pages/MainPage.vue";
 import FilmCardBig from "@/components/FilmCardBig.vue";
 import FilmCardSmall from "@/components/FilmCardSmall.vue";
 import RecommendationFilms from "@/components/recommendationSimilarFilms.vue";
@@ -29,7 +29,7 @@ export default {
     return {
       infoFilmId: {},
       filmId: this.$route.params.id,
-      isSearch: this.isSearch,
+      isSearch: false,
     };
   },
   props: {
@@ -59,9 +59,9 @@ export default {
       searchNameFilm = searchNameFilm.trim();
       searchNameFilm = searchNameFilm.toLowerCase();
       if (searchNameFilm !== "") {
-        this.isSearch = 1;
+        this.isSearch = true;
         this.$refs.main.searchFilms(searchNameFilm);
-      } else this.isSearch = 0;
+      } else this.isSearch = false;
     },
   },
 };

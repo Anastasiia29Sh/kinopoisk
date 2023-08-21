@@ -21,12 +21,12 @@ export default {
   data() {
     return {
       nameFilm: "",
-      isSearch: this.isSearch,
+      isSearch: false,
     };
   },
   methods: {
     searchFilm() {
-      this.isSearch = 1;
+      this.isSearch = true;
       this.$emit("search", this.nameFilm);
     },
   },

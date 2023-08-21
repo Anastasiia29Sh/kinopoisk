@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       searchNameFilm: "",
-      isSearch: this.isSearch,
+      isSearch: false,
     };
   },
   mounted() {
@@ -32,7 +32,7 @@ export default {
     }),
     searchFilms(nameFilm) {
       this.searchNameFilm = nameFilm;
-      this.isSearch = 1;
+      this.isSearch = true;
     },
   },
   computed: {

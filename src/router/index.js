@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Main from '@/pages/Main.vue'
+import Main from '@/pages/MainPage.vue'
 import FilmIdPage from '@/pages/FilmIdPage.vue'
 import BookmarksEstimates from '@/pages/BookmarksEstimates.vue'
 

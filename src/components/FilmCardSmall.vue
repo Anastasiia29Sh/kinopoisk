@@ -34,7 +34,7 @@ export default {
   name: "FilmCardSmall",
   data() {
     return {
-      isSearch: this.isSearch,
+      isSearch: false,
     };
   },
   props: {
@@ -56,7 +56,7 @@ export default {
       document.getElementById(idFilm).style.display = "none";
     },
     goInfoFilm(idFilm) {
-      this.isSearch = 0;
+      this.isSearch = false;
       this.$root.searchNameFilm = "";
       document.getElementById("search").value = "";
       this.$router.push(`/film/${idFilm}`);

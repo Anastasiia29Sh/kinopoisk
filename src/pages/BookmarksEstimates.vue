@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import MyMain from "@/pages/Main.vue";
+import MyMain from "@/pages/MainPage.vue";
 import { mapState, mapActions } from "vuex";
 export default {
   components: {

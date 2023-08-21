@@ -5,6 +5,4 @@ import store from './store'
 
 let app = createApp(App);
 
-app.config.globalProperties.isSearch = 0;
-
 app.use(store).use(router).mount('#app');
